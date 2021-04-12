@@ -34,13 +34,19 @@ switch ($optionPost) {
 
     $dbModel = new devsalsaModel();
     $dbModel->dbConnect();
-    $iduser = $dbModel->insert_user($data);
-    $dbModel->dbDisconnect();
 
+    $iduser = $dbModel->get_user_exist($data);
     if($iduser>0){
       $GLOBALS['option']='message';
-      $GLOBALS['mensaje']='Registro Exitoso';
+      $GLOBALS['mensaje']='Usuario ya registrado';
+    }else{
+      $iduser = $dbModel->insert_user($data);
+      if($iduser>0){
+        $GLOBALS['option']='message';
+        $GLOBALS['mensaje']='Registro Exitoso';
+      }
     }
+    $dbModel->dbDisconnect();
     break;
 
   case 'change':

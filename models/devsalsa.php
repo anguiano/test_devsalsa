@@ -29,8 +29,8 @@ class devsalsaModel extends Dbconfig {
     }
 
     function dbConnect()    {
-        $this -> connectionString = new mysqli($this -> serverName,$this -> userName,$this -> passCode,$this -> databaseName);
-        return $this -> connectionString;
+        $this->connectionString = new mysqli($this->serverName, $this->userName, $this->passCode, $this->databaseName);
+        return $this->connectionString;
     }
 
     function dbDisconnect() {
@@ -45,7 +45,8 @@ class devsalsaModel extends Dbconfig {
     }
 
     function get_user($data)   {
-        $query = "SELECT id FROM usuarios WHERE user='$data[user]' and passw='$data[pass]'" ;
+        $query = "SELECT id FROM usuarios WHERE user='$data[user]' and passw=md5($data[pass])" ;
+        error_log($query);
         $result = $this->connectionString->query($query);
         if($result->num_rows>0){
           while($row = $result->fetch_assoc()){
@@ -62,6 +63,20 @@ class devsalsaModel extends Dbconfig {
         $query = "INSERT INTO usuarios (nombre, correo, passw, activo) values ('$data[name]', '$data[user]', MD5($data[pass]), 1)" ;
         $result = $this->connectionString->query($query);
         return $mysqli->insert_id;
+    }
+
+    function get_user_exist($data)   {
+        $query = "SELECT id FROM usuarios WHERE user='$data[user]' and active=1 limit 1" ;
+        $result = $this->connectionString->query($query);
+        if($result->num_rows>0){
+          while($row = $result->fetch_assoc()){
+            $user = $row;
+          }
+        }else{
+          $user = 0;
+        }
+
+        return $user;
     }
 
 }
