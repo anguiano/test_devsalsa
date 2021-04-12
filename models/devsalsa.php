@@ -58,6 +58,12 @@ class devsalsaModel extends Dbconfig {
         return $user;
     }
 
+    function insert_user($data)   {
+        $query = "INSERT INTO usuarios (nombre, correo, passw, activo) values ('$data[name]', '$data[user]', MD5($data[pass]), 1)" ;
+        $result = $this->connectionString->query($query);
+        return $mysqli->insert_id;
+    }
+
 }
 
  ?>

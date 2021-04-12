@@ -26,7 +26,21 @@ switch ($optionPost) {
     break;
 
   case 'register':
-    
+    $data = array(
+      'user'=>filter_input(INPUT_POST, 'user'),
+      'pass'=>filter_input(INPUT_POST, 'pass'),
+      'name'=>filter_input(INPUT_POST, 'name')
+    );
+
+    $dbModel = new devsalsaModel();
+    $dbModel->dbConnect();
+    $iduser = $dbModel->insert_user($data);
+    $dbModel->dbDisconnect();
+
+    if($iduser>0){
+      $GLOBALS['option']='message';
+      $GLOBALS['mensaje']='Registro Exitoso';
+    }
     break;
 
   case 'change':
